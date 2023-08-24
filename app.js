@@ -34,6 +34,9 @@ const keyMapping = {
 document.addEventListener('keydown', e => {
   if (!keyMapping[e.key]) return
 
+  ctx.fillStyle = "white"
+  ctx.fillRect(0, 0, 750, 750)
+
   keyMapping[e.key]()
 
   ctx.fillStyle = getRandomRGBA()
