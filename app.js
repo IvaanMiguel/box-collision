@@ -11,36 +11,67 @@ const getRandomRGBA = () => {
   return `rgba(${r}, ${g}, ${b}, ${a})`
 }
 
-// document.addEventListener('keydown', () => {
-//   const x = Math.floor(Math.random() * 750);
-//   const y = Math.floor(Math.random() * 750);
-
-//   ctx.fillStyle = getRandomRGBA()
-
-//   ctx.fillRect(x, y, side, side)
-//   ctx.strokeRect(x, y, side, side)
-// });
-
 let x = 350;
 let y = 350;
+let dir = '';
 
 const keyMapping = {
-  'w': () => { y -= 10 },
-  's': () => { y += 10 },
-  'd': () => { x += 10 },
-  'a': () => { x -= 10 }
+  'up': () => {
+    y -= 10
+    if (y < -50) y = 800
+  },
+  'left': () => {
+    x -= 10
+    if (x < -50) x = 800
+  },
+  'down': () => {
+    y += 10
+    if (y > 800) y = -50
+  },
+  'right': () => {
+    x += 10
+    if (x > 800) x = -50
+  }
+}
+
+const dirMapping = {
+  'w': () => { dir = 'up' },
+  'a': () => { dir = 'left' },
+  's': () => { dir = 'down' },
+  'd': () => { dir = 'right' }
 }
 
 document.addEventListener('keydown', e => {
-  if (!keyMapping[e.key]) return
+  if (!dirMapping[e.key]) return
+
+  dirMapping[e.key]()
+
+  update()
+})
+
+function update() {
+  if (!keyMapping[dir]) return
+
+  keyMapping[dir]()
 
   ctx.fillStyle = "white"
-  ctx.fillRect(0, 0, 750, 750)
-
-  keyMapping[e.key]()
+  ctx.fillRect(0, 0, 750, 750)  
 
   ctx.fillStyle = getRandomRGBA()
-
+  
   ctx.fillRect(x, y, side, side)
   ctx.strokeRect(x, y, side, side)
-})
+
+  window.requestAnimationFrame(update);
+}
+
+window.requestAnimationFrame = (function () {
+  return window.requestAnimationFrame ||
+      window.webkitRequestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      function (callback) {
+        setTimeout(callback, 17);
+      };
+}());
+
+window.requestAnimationFrame(update);
