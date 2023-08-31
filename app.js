@@ -45,14 +45,10 @@ document.addEventListener('keydown', e => {
   if (!dirMapping[e.key]) return
 
   dirMapping[e.key]()
-
-  update()
 })
 
 function update() {
-  if (!keyMapping[dir]) return
-
-  keyMapping[dir]()
+  if (dir != '') keyMapping[dir]()
 
   ctx.fillStyle = "white"
   ctx.fillRect(0, 0, 750, 750)  
