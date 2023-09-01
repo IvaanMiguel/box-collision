@@ -8,7 +8,7 @@ class Box {
     this.y2 = props.y + props.height
     this.width = props.width
     this.height = props.height
-    this.speed = props.speed || 0
+    this.speed = props.speed || 1
     this.color = props.color || 'black'
   }
 
