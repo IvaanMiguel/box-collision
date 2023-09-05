@@ -1,4 +1,5 @@
 import { canvas } from './app.js'
+import pauseScreen from './PauseScreen.js'
 
 class Controller {
   constructor(inst, keys = { up: 'w', left: 'a', down: 's', right: 'd' }) {
@@ -17,7 +18,7 @@ class Controller {
     this._mapKeys()
 
     document.body.addEventListener('keydown', e => {
-      if (!this._dirMapping[e.key]) return
+      if (!this._dirMapping[e.key] || pauseScreen.isVisible) return
 
       this._dirMapping[e.key]()
     })

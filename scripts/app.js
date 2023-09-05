@@ -1,5 +1,7 @@
 import Box from './Box.class.js'
 import Controller from './Controller.class.js';
+import pauseScreen from './PauseScreen.js'
+import playerScore from './PlayerScore.js';
 
 function getRandomBetween(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min)
@@ -85,41 +87,53 @@ obstacles.push(new Box({
   color: 'black'
 }))
 
+document.addEventListener('keydown', (e) => {
+  if (e.code === pauseScreen.pauseKey) pauseScreen.isVisible = !pauseScreen.isVisible
+})
+
 function repaintCanvas() {
   ctx.fillStyle = "white"
   ctx.fillRect(0, 0, 750, 750)  
 }
 
 function update() {
-  repaintCanvas()
-
-  obstacles.forEach(obstacle => obstacle.paint())
-
-  player.controller.update()
-
-  obstacles.forEach(obstacle => player.checkCollisionWith(obstacle))
-
-  player.paint()
-
-  if (player.isCollidingWith(target)) {
-    let targetColliding = false
-
-    do {
-      target.x1 = getRandomBetween(0, canvas.width - targetWidth)
-      target.y1 = getRandomBetween(0, canvas.height - targetHeight)
-
-      for (let i = 0; i < obstacles.length; i++) {
-        if (target.isCollidingWith(obstacles[i])) {
-          targetColliding = true
-          break
+  if (!pauseScreen.isVisible) {
+    repaintCanvas()
+  
+    obstacles.forEach(obstacle => obstacle.paint())
+  
+    player.controller.update()
+  
+    obstacles.forEach(obstacle => player.checkCollisionWith(obstacle))
+  
+    player.paint()
+  
+    if (player.isCollidingWith(target)) {
+      let targetColliding = false
+  
+      do {
+        target.x1 = getRandomBetween(0, canvas.width - targetWidth)
+        target.y1 = getRandomBetween(0, canvas.height - targetHeight)
+  
+        for (let i = 0; i < obstacles.length; i++) {
+          if (target.isCollidingWith(obstacles[i])) {
+            targetColliding = true
+            break
+          }
+  
+          targetColliding = false
         }
+      } while (targetColliding)
 
-        targetColliding = false
-      }
-    } while (targetColliding)
+      playerScore.score += 100
+    }
+
+    target.paint()
+
+    playerScore.paint()
+  } else {
+    pauseScreen.paint()
   }
-
-  target.paint()
 
   window.requestAnimationFrame(update);
 }
