@@ -10,6 +10,8 @@ class Box {
     this.height = props.height
     this.speed = props.speed || 1
     this.color = props.color || 'black'
+
+    this.image = new Image()
   }
 
   set x1(x) {
@@ -26,9 +28,16 @@ class Box {
 
   get y1() { return this._y1 }
 
+  setSrcImage(src) {
+    this.image.src = src
+  }
+
   paint() {
     ctx.fillStyle = this.color
-    ctx.fillRect(this.x1, this.y1, this.width, this.height)
+
+    this.image.src
+      ? ctx.drawImage(this.image, this.x1, this.y1, this.width, this.height)
+      : ctx.fillRect(this.x1, this.y1, this.width, this.height)
   }
 
   isCollidingWith(box) {

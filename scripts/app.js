@@ -35,6 +35,8 @@ const obstacleHeight = 75
 const obstacleX = canvas.width / 2 - obstacleWidth / 2
 const obstacleY = 75 - obstacleHeight / 2
 
+let eatSound
+
 const player = new Box({
   x: playerX,
   y: playerY,
@@ -45,6 +47,7 @@ const player = new Box({
 })
 
 player.controller = new Controller(player)
+player.setSrcImage('../images/snake.png')
 
 const target = new Box({
   x: targetX,
@@ -54,6 +57,8 @@ const target = new Box({
   speed: 5,
   color: 'red'
 })
+
+target.setSrcImage('../images/apple.png')
 
 const obstacles = []
 obstacles.push(new Box({
@@ -126,6 +131,9 @@ function update() {
       } while (targetColliding)
 
       playerScore.score += 100
+
+      eatSound = new Audio('../sound/eat.mp3')
+      eatSound.play()
     }
 
     target.paint()
